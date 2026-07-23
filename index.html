@@ -255,7 +255,7 @@ body.viewonly .edit-only{display:none!important}
     <select id="fSource" onchange="App.renderOrders()"><option value="">All sources</option></select>
     <select id="fDest" onchange="App.renderOrders()"><option value="">All destinations</option></select>
     <select id="fAssoc" onchange="App.renderOrders()"><option value="">All associates</option></select>
-    <select id="fRisk" onchange="App.renderOrders()"><option value="">All statuses</option><option value="risk">At risk / overdue</option><option value="delayed">Has delays</option></select>
+    <select id="fRisk" onchange="App.renderOrders()"><option value="">All statuses</option><option value="risk">At risk / overdue</option><option value="delayed">Has delays</option><option value="hold">On hold</option></select>
   </div>
   <div class="card tablewrap">
     <table>
@@ -434,6 +434,8 @@ const App = {
       o.pieces=[{name:o.designName||'Piece 1',stages:o.stages||{}}];
     }
     delete o.stages;
+    o.hold=o.hold||{on:false,since:'',reason:''};
+    o.holdLog=Array.isArray(o.holdLog)?o.holdLog:[];
     o.pieces.forEach(p=>{
       p.name=p.name||'Piece';
       const base=App.blankStages();
@@ -461,7 +463,15 @@ const App = {
     return best; // null = every piece complete
   },
   maxRem(o){ return Math.max(0,...o.pieces.map(App.pieceRem)); },
+  isHeld(o){ return !!(o.hold&&o.hold.on); },
+  heldDays(o){
+    let n=0;
+    (o.holdLog||[]).forEach(h=>{const d=App.days(h.start,h.end);if(d!==null&&d>0)n+=d;});
+    if(App.isHeld(o)){const d=App.days(o.hold.since,App.today());if(d!==null&&d>0)n+=d;}
+    return n;
+  },
   isRisk(o){
+    if(App.isHeld(o))return null; // held orders are not flagged
     const cd=App.countdown(o); if(cd===null)return null;
     let worst=null;
     for(const p of o.pieces){
@@ -487,7 +497,9 @@ const App = {
     let first=''; o.pieces.forEach(p=>{const x=p.stages.preprod.startDate||'';if(x&&(!first||x<first))first=x;});
     first=first||o.orderDate;
     const last=App.dispatchDate(o);
-    return App.days(first,last);
+    const d=App.days(first,last);
+    if(d===null)return null;
+    return Math.max(0,d-App.heldDays(o)); // net of hold time
   },
   fmt(d){ if(!d)return '—'; const x=new Date(d); return x.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}); },
   esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); },
@@ -510,6 +522,7 @@ const App = {
 
   /* ---------- shared render bits ---------- */
   cdChip(o){
+    if(App.isHeld(o))return '<span class="chip grey">⏸ On hold</span>';
     const cd=App.countdown(o); if(cd===null)return '<span class="cd">—</span>';
     const r=App.isRisk(o);
     const cls=(r==='over'||r==='red')?'red':r==='amber'?'amber':'ok';
@@ -542,6 +555,8 @@ const App = {
   /* ---------- dashboard ---------- */
   renderDash(){
     const os=App.orders;
+    const held=os.filter(App.isHeld);
+    const active=os.filter(o=>!App.isHeld(o));
     const pieces=os.reduce((n,o)=>n+o.pieces.length,0);
     const over=os.filter(o=>App.isRisk(o)==='over').length;
     const red=os.filter(o=>App.isRisk(o)==='red').length;
@@ -557,18 +572,19 @@ const App = {
       <div class="card kpi"><div class="n">${pieces}</div><div class="l">Pieces in production</div></div>
       <div class="card kpi red"><div class="n">${over+red}</div><div class="l">At risk / overdue</div></div>
       <div class="card kpi amber"><div class="n">${amber}</div><div class="l">Watch list</div></div>
+      <div class="card kpi"><div class="n">${held.length}</div><div class="l">On hold</div></div>
       <div class="card kpi"><div class="n">${outNow.length}</div><div class="l">With vendors</div></div>
       <div class="card kpi green"><div class="n">${App.archive.length}</div><div class="l">Delivered (archive)</div></div>`;
-    document.getElementById('dashSub').textContent=`${os.length} live orders · ${pieces} pieces · updated ${new Date().toLocaleTimeString()}`;
+    document.getElementById('dashSub').textContent=`${os.length} live orders (${held.length} on hold) · ${pieces} pieces · updated ${new Date().toLocaleTimeString()}`;
 
-    const counts=STAGES.map(s=>({s,n:App.orders.reduce((n,o)=>n+o.pieces.filter(p=>{const c=App.pieceCur(p);return c&&c.id===s.id;}).length,0)}));
+    const counts=STAGES.map(s=>({s,n:active.reduce((n,o)=>n+o.pieces.filter(p=>{const c=App.pieceCur(p);return c&&c.id===s.id;}).length,0)}));
     const mx=Math.max(1,...counts.map(c=>c.n));
     document.getElementById('pipeline').innerHTML=counts.map(c=>`
       <div class="pipebar"><span class="pl">${c.s.name}</span>
       <span class="track"><span class="fill" style="width:${(c.n/mx*100)}%;${c.n===0?'opacity:0':''}"></span></span>
       <span class="pc">${c.n}</span></div>`).join('');
 
-    const scored=os.map(o=>{
+    const scored=active.map(o=>{
       const cd=App.countdown(o); const rem=App.maxRem(o);
       if(cd===null||rem===0)return null;
       const score=cd<=0?9999+rem:rem/Math.max(cd,0.5)*100;
@@ -604,6 +620,7 @@ const App = {
       if(fa&&!o.pieces.some(p=>{const c=App.pieceCur(p);return c&&p.stages[c.id].associate===fa;}))return false;
       if(fr==='risk'&&!['over','red','amber'].includes(App.isRisk(o)))return false;
       if(fr==='delayed'&&!App.hasDelay(o))return false;
+      if(fr==='hold'&&!App.isHeld(o))return false;
       return true;
     }).sort((a,b)=>(a.deliveryDate||'9999')<(b.deliveryDate||'9999')?-1:1);
     document.getElementById('ordersSub').textContent=`${rows.length} of ${App.orders.length} orders`;
@@ -787,11 +804,18 @@ const App = {
     document.getElementById('mDelete').style.display=App.isNew?'none':'';
 
     const pd=App.prodDays(o);
-    document.getElementById('mInfo').innerHTML=`
+    const holdBanner=App.isHeld(o)?`<div style="background:var(--grey-soft);border:1px solid var(--line);border-radius:9px;padding:11px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span class="chip grey">⏸ On hold</span>
+        <span style="font-size:13px">since <strong>${App.fmt(o.hold.since)}</strong> (${App.days(o.hold.since,App.today())??0}d)${o.hold.reason?` · ${App.esc(o.hold.reason)}`:''}</span>
+        <button class="btn sm edit-only" style="margin-left:auto" onclick="App.resumeOrder()">▶ Resume production</button>
+      </div>`
+      :(!App.isNew&&!o._archived?`<div style="margin-bottom:14px;display:flex;justify-content:flex-end"><button class="btn ghost sm edit-only" onclick="App.holdOrder()">⏸ Put on hold</button></div>`:'');
+    document.getElementById('mInfo').innerHTML=holdBanner+`
       ${!App.isNew?`<div class="metabar">
         <div class="m"><div class="ml">Countdown</div><div class="mv">${App.cdChip(o)}</div></div>
         <div class="m"><div class="ml">Current stage</div><div class="mv">${App.stageChip(o)}</div></div>
         <div class="m"><div class="ml">Total production</div><div class="mv mono">${pd===null?'in progress':pd+' days'}</div></div>
+        ${App.heldDays(o)>0?`<div class="m"><div class="ml">Held (total)</div><div class="mv mono">${App.heldDays(o)} days</div></div>`:''}
       </div>`:''}
       <div class="editable">
       <div class="grid3">
@@ -912,6 +936,26 @@ const App = {
     o.notes=document.getElementById('eNotes').value.trim();
     o.pieces.forEach((p,i)=>{ if(!p.name.trim())p.name='Piece '+(i+1); p.name=p.name.trim(); });
     return o;
+  },
+
+  async holdOrder(){
+    if(!App.passcode){App.toast('Enable editing first','err');return;}
+    const reason=prompt('Reason for hold (optional):')??'';
+    const o=App.collect(); delete o._archived;
+    o.hold={on:true,since:App.today(),reason:reason.trim()};
+    const j=await App.post({action:'saveOrder',order:o});
+    if(!j)return;
+    App.toast('Order on hold'); App.closeModal(); App.refresh();
+  },
+  async resumeOrder(){
+    if(!App.passcode){App.toast('Enable editing first','err');return;}
+    const o=App.collect(); delete o._archived;
+    o.holdLog=o.holdLog||[];
+    o.holdLog.push({start:o.hold.since,end:App.today(),reason:o.hold.reason||''});
+    o.hold={on:false,since:'',reason:''};
+    const j=await App.post({action:'saveOrder',order:o});
+    if(!j)return;
+    App.toast('Production resumed'); App.closeModal(); App.refresh();
   },
 
   async saveOrder(){
