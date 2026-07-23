@@ -166,6 +166,28 @@ body.viewonly .edit-only{display:none!important}
   main{padding:16px 12px 70px}
 }
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- reports ---------- */
+.repgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:900px){.repgrid{grid-template-columns:1fr}}
+.rep-h1{font-family:'Fraunces',serif;font-size:18px;font-weight:600;margin:22px 0 10px}
+.minitable{width:100%;border-collapse:collapse;font-size:13px}
+.minitable th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);padding:7px 10px;border-bottom:1px solid var(--line)}
+.minitable td{padding:7px 10px;border-bottom:1px dashed var(--line)}
+.minitable tr:last-child td{border-bottom:none}
+.minitable .num{font-family:'IBM Plex Mono',monospace;text-align:right}
+.repbar{display:flex;align-items:center;gap:9px;padding:4px 0}
+.repbar .bl{width:150px;font-size:12.5px;flex:none}
+.repbar .btrack{flex:1;height:13px;background:var(--grey-soft);border-radius:4px;overflow:hidden}
+.repbar .bfill{height:100%;background:var(--gold);border-radius:4px;min-width:2px}
+.repbar .bv{font-family:'IBM Plex Mono',monospace;font-size:12px;width:52px;text-align:right;flex:none}
+@media print{
+  header,.pagehead .btn,.filters,#setup{display:none!important}
+  body{background:#fff}
+  main{max-width:100%;padding:0}
+  .view{display:none!important}.view.on{display:block!important}
+  .card{box-shadow:none;border-color:#ccc;break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -177,6 +199,7 @@ body.viewonly .edit-only{display:none!important}
       <button class="tab on" data-v="dash">Dashboard</button>
       <button class="tab" data-v="orders">Orders</button>
       <button class="tab" data-v="delays">Delays</button>
+      <button class="tab" data-v="reports">Reports</button>
       <button class="tab" data-v="archive">Archive</button>
     </nav>
     <button class="editpill" id="editPill" style="display:none" title="Toggle edit mode">
@@ -239,6 +262,7 @@ body.viewonly .edit-only{display:none!important}
     <select id="fStage" onchange="App.renderOrders()"><option value="">All stages</option></select>
     <select id="fSource" onchange="App.renderOrders()"><option value="">All sources</option></select>
     <select id="fDest" onchange="App.renderOrders()"><option value="">All destinations</option></select>
+    <select id="fAssoc" onchange="App.renderOrders()"><option value="">All associates</option></select>
     <select id="fRisk" onchange="App.renderOrders()"><option value="">All statuses</option><option value="risk">At risk / overdue</option><option value="delayed">Has delays</option></select>
   </div>
   <div class="card tablewrap">
@@ -257,11 +281,25 @@ body.viewonly .edit-only{display:none!important}
   <div class="pagehead"><div><h2>Delays</h2><p id="delaysSub">Every recorded delay across live orders</p></div></div>
   <div class="card tablewrap">
     <table>
-      <thead><tr><th>Order</th><th>Customer</th><th>Stage</th><th>Mode</th><th>Vendor</th><th>Days delayed</th><th>Reason</th></tr></thead>
+      <thead><tr><th>Order</th><th>Customer</th><th>Stage</th><th>Associate</th><th>Mode</th><th>Vendor</th><th>Days delayed</th><th>Reason</th></tr></thead>
       <tbody id="delaysBody"></tbody>
     </table>
     <div class="empty" id="delaysEmpty" style="display:none">No delays recorded. Long may it last.</div>
   </div>
+</section>
+
+<!-- REPORTS -->
+<section class="view" id="v-reports">
+  <div class="pagehead">
+    <div><h2>Monthly report</h2><p>Volume by order date · speed, delays &amp; vendors by dispatch date</p></div>
+    <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
+      <input type="month" id="repMonth" onchange="App.renderReports()" style="width:auto">
+      <button class="btn ghost sm" onclick="App.repPrev()">‹ Prev</button>
+      <button class="btn ghost sm" onclick="App.repThis()">This month</button>
+      <button class="btn sm" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  </div>
+  <div id="repBody"></div>
 </section>
 
 <!-- ARCHIVE -->
@@ -321,7 +359,7 @@ const STAGES = [
   {id:'ready',     name:'Ready',                prod:false},
   {id:'dispatched',name:'Dispatched',           prod:false},
 ];
-const SOURCES = ['Instagram','Referral','Exhibition','Walk-in','Website','Other'];
+const SOURCES = ['Studio','Instagram','WhatsApp','Website','Exhibition','Other'];
 const DESTS   = ['Karachi','Lahore','Islamabad','Other Pakistan','USA','UK','UAE','Other'];
 const DEPTS   = ['Lux','Bridal','Formal'];
 const LATE_STAGE_IDS = ['finishing','qc','ready','dispatched'];
@@ -330,7 +368,7 @@ const LATE_STAGE_IDS = ['finishing','qc','ready','dispatched'];
 const App = {
   url: localStorage.getItem('umsha_tracker_url') || '',
   passcode: sessionStorage.getItem('umsha_tracker_pass') || '',
-  orders: [], archive: [], current: null, isNew:false,
+  orders: [], archive: [], lists:{vendors:[],associates:[]}, current: null, isNew:false,
 
   /* ---------- boot ---------- */
   init(){
@@ -379,6 +417,8 @@ const App = {
       if(j.error) throw new Error(j.error);
       App.orders=(j.orders||[]).map(App.norm);
       App.archive=(j.archive||[]).map(App.norm);
+      App.lists={vendors:(j.lists&&j.lists.vendors)||[],associates:(j.lists&&j.lists.associates)||[]};
+      App.fillAssocFilter();
       App.dot('ok'); App.renderAll();
     }catch(e){ App.dot('err'); App.toast('Could not load data — check connection / URL','err'); console.error(e); }
   },
@@ -397,7 +437,7 @@ const App = {
   /* ---------- model helpers ---------- */
   norm(o){
     o.stages=o.stages||{};
-    STAGES.forEach(s=>{ o.stages[s.id]=Object.assign({status:'pending',mode:'inhouse',vendor:'',dateSent:'',dateReturned:'',startDate:'',endDate:'',delayDays:'',delayReason:''},o.stages[s.id]||{}); });
+    STAGES.forEach(s=>{ o.stages[s.id]=Object.assign({status:'pending',mode:'inhouse',vendor:'',dateSent:'',dateReturned:'',startDate:'',endDate:'',delayDays:'',delayReason:'',associate:''},o.stages[s.id]||{}); });
     return o;
   },
   blank(){
@@ -405,8 +445,8 @@ const App = {
     return App.norm(o);
   },
   nextNo(){
-    let mx=0;[...App.orders,...App.archive].forEach(o=>{const m=String(o.orderNumber||'').match(/(\d+)$/);if(m)mx=Math.max(mx,parseInt(m[1]));});
-    return 'UM-'+String(mx+1).padStart(4,'0');
+    let mx=0;[...App.orders,...App.archive].forEach(o=>{const n=parseInt(String(o.orderNumber||'').replace(/\D/g,''));if(!isNaN(n))mx=Math.max(mx,n);});
+    return String(mx+1);
   },
   today(){ return new Date().toISOString().slice(0,10); },
   days(a,b){ if(!a||!b)return null; return Math.round((new Date(b)-new Date(a))/86400000); },
@@ -434,7 +474,115 @@ const App = {
   fmt(d){ if(!d)return '—'; const x=new Date(d); return x.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}); },
 
   /* ---------- render ---------- */
-  renderAll(){ App.renderDash(); App.renderOrders(); App.renderDelays(); App.renderArchive(); },
+  renderAll(){ App.renderDash(); App.renderOrders(); App.renderDelays(); App.renderArchive(); App.renderReports(); },
+
+  /* ---------- reports ---------- */
+  dispatchDate(o){ const d=o.stages&&o.stages.dispatched; return d?(d.endDate||d.startDate||''):''; },
+  inMonth(dateStr,ym){ return !!dateStr && dateStr.slice(0,7)===ym; },
+  repPrev(){ const el=document.getElementById('repMonth'); const [y,m]=el.value.split('-').map(Number); const d=new Date(y,m-2,1); el.value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); App.renderReports(); },
+  repThis(){ document.getElementById('repMonth').value=App.today().slice(0,7); App.renderReports(); },
+  avg(a){ return a.length?Math.round(a.reduce((x,y)=>x+y,0)/a.length*10)/10:null; },
+  tally(arr,key){ const m={}; arr.forEach(o=>{const k=o[key]||'—'; m[k]=(m[k]||0)+1;}); return Object.entries(m).sort((a,b)=>b[1]-a[1]); },
+  miniTable(head,rows){ return `<table class="minitable"><thead><tr>${head.map(h=>`<th${h.startsWith('#')?' style="text-align:right"':''}>${h.replace('#','')}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${r.map((c,i)=>`<td class="${head[i].startsWith('#')?'num':''}">${c}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${head.length}" class="empty">No data for this month.</td></tr>`}</tbody></table>`; },
+
+  renderReports(){
+    const el=document.getElementById('repMonth');
+    if(!el.value)el.value=App.today().slice(0,7);
+    const ym=el.value;
+    const label=new Date(ym+'-01').toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+    const all=[...App.orders,...App.archive];
+
+    // ---- volume (by order date) ----
+    const received=all.filter(o=>App.inMonth(o.orderDate,ym));
+    const dispatched=all.filter(o=>{const st=o.stages.dispatched; return (st.status==='done')&&App.inMonth(App.dispatchDate(o),ym);});
+    const live=App.orders.length;
+
+    // ---- speed (dispatched this month) ----
+    const prodTimes=dispatched.map(App.prodDays).filter(d=>d!==null&&d>=0);
+    const stageDur={};
+    dispatched.forEach(o=>STAGES.forEach(s=>{
+      const st=o.stages[s.id]; if(st.status!=='done')return;
+      const d=App.days(st.startDate,st.endDate);
+      if(d!==null&&d>=0){ (stageDur[s.id]=stageDur[s.id]||[]).push(d); }
+    }));
+
+    // ---- delays (lifecycle of dispatched orders) ----
+    const delays=[]; let dlIn=0,dlOut=0;
+    dispatched.forEach(o=>STAGES.forEach(s=>{
+      const st=o.stages[s.id]; const dd=Number(st.delayDays)||0;
+      if(dd>0){ delays.push({o,s,st,dd}); if(s.prod&&st.mode==='outsourced')dlOut+=dd; else dlIn+=dd; }
+    }));
+    const dlByStage={},dlByReason={};
+    delays.forEach(d=>{ dlByStage[d.s.name]=(dlByStage[d.s.name]||0)+d.dd; const r=(d.st.delayReason||'Unspecified').trim()||'Unspecified'; dlByReason[r]=(dlByReason[r]||0)+d.dd; });
+
+    // ---- vendors (dispatched this month) ----
+    const vend={};
+    dispatched.forEach(o=>STAGES.forEach(s=>{
+      const st=o.stages[s.id];
+      if(!s.prod||st.mode!=='outsourced')return;
+      const name=(st.vendor||'Unnamed vendor').trim()||'Unnamed vendor';
+      const v=vend[name]=vend[name]||{jobs:0,turn:[],delay:0};
+      v.jobs++; v.delay+=Number(st.delayDays)||0;
+      const t=App.days(st.dateSent,st.dateReturned); if(t!==null&&t>=0)v.turn.push(t);
+    }));
+
+    // ---- associates (dispatched this month) ----
+    const assoc={};
+    dispatched.forEach(o=>STAGES.forEach(s=>{
+      const st=o.stages[s.id];
+      if(st.status!=='done'||!st.associate)return;
+      const a=assoc[st.associate]=assoc[st.associate]||{jobs:0,dur:[],delay:0};
+      a.jobs++; a.delay+=Number(st.delayDays)||0;
+      const d=App.days(st.startDate,st.endDate); if(d!==null&&d>=0)a.dur.push(d);
+    }));
+
+    // ---- deadline performance ----
+    const withDl=dispatched.filter(o=>o.deliveryDate);
+    const onTime=withDl.filter(o=>App.dispatchDate(o)<=o.deliveryDate);
+    const lateDays=withDl.filter(o=>App.dispatchDate(o)>o.deliveryDate).map(o=>App.days(o.deliveryDate,App.dispatchDate(o)));
+    const otPct=withDl.length?Math.round(onTime.length/withDl.length*100):null;
+
+    const durRows=STAGES.filter(s=>stageDur[s.id]).map(s=>({name:s.name,avg:App.avg(stageDur[s.id]),n:stageDur[s.id].length}));
+    const maxDur=Math.max(1,...durRows.map(r=>r.avg||0));
+
+    document.getElementById('repBody').innerHTML=`
+      <div class="kpis">
+        <div class="card kpi"><div class="n">${received.length}</div><div class="l">Orders received</div></div>
+        <div class="card kpi"><div class="n">${dispatched.length}</div><div class="l">Dispatched</div></div>
+        <div class="card kpi"><div class="n">${live}</div><div class="l">Live (now)</div></div>
+        <div class="card kpi ${otPct!==null&&otPct<80?'red':'green'}"><div class="n">${otPct===null?'—':otPct+'%'}</div><div class="l">On-time dispatch</div></div>
+        <div class="card kpi"><div class="n">${App.avg(prodTimes)??'—'}</div><div class="l">Avg production days</div></div>
+        <div class="card kpi amber"><div class="n">${dlIn+dlOut}</div><div class="l">Delay days (total)</div></div>
+      </div>
+      <p style="color:var(--ink-soft);font-size:12.5px;margin-bottom:4px">Report for <strong>${label}</strong> · generated ${new Date().toLocaleString('en-GB')} · dispatched orders in month: ${dispatched.length}${lateDays.length?` · avg days late when missed: ${App.avg(lateDays)}`:''}</p>
+
+      <div class="repgrid">
+        <div class="card panel"><h3>Received — by department</h3>${App.miniTable(['Department','#Orders'],App.tally(received,'department'))}</div>
+        <div class="card panel"><h3>Received — by source</h3>${App.miniTable(['Source','#Orders'],App.tally(received,'source'))}</div>
+        <div class="card panel"><h3>Received — by destination</h3>${App.miniTable(['Destination','#Orders'],App.tally(received,'destination'))}</div>
+        <div class="card panel"><h3>Delays — in-house vs outsourced</h3>${App.miniTable(['Where','#Delay days'],[['In-house',dlIn],['Outsourced',dlOut]])}</div>
+      </div>
+
+      <div class="rep-h1">Average stage duration — orders dispatched in ${label}</div>
+      <div class="card panel">${durRows.length?durRows.map(r=>`
+        <div class="repbar"><span class="bl">${r.name}</span>
+        <span class="btrack"><span class="bfill" style="width:${r.avg/maxDur*100}%"></span></span>
+        <span class="bv">${r.avg}d</span></div>`).join(''):'<div class="empty">No completed stage data for this month.</div>'}
+      </div>
+
+      <div class="repgrid">
+        <div class="card panel"><h3>Delay days by stage</h3>${App.miniTable(['Stage','#Days'],Object.entries(dlByStage).sort((a,b)=>b[1]-a[1]))}</div>
+        <div class="card panel"><h3>Delay days by reason</h3>${App.miniTable(['Reason','#Days'],Object.entries(dlByReason).sort((a,b)=>b[1]-a[1]))}</div>
+      </div>
+
+      <div class="rep-h1">Vendor scorecard — outsourced work on orders dispatched in ${label}</div>
+      <div class="card panel">${App.miniTable(['Vendor','#Jobs','#Avg turnaround','#Delay days'],
+        Object.entries(vend).sort((a,b)=>b[1].jobs-a[1].jobs).map(([n,v])=>[App.esc(n),v.jobs,(App.avg(v.turn)??'—')+(App.avg(v.turn)!==null?'d':''),v.delay]))}</div>
+
+      <div class="rep-h1">Associate scorecard — stages completed on orders dispatched in ${label}</div>
+      <div class="card panel">${App.miniTable(['Associate','#Stages done','#Avg stage duration','#Delay days'],
+        Object.entries(assoc).sort((a,b)=>b[1].jobs-a[1].jobs).map(([n,v])=>[App.esc(n),v.jobs,(App.avg(v.dur)??'—')+(App.avg(v.dur)!==null?'d':''),v.delay]))}</div>`;
+  },
 
   cdChip(o){
     const cd=App.countdown(o); if(cd===null)return '<span class="cd">—</span>';
@@ -464,6 +612,16 @@ const App = {
     return html+'</div>';
   },
   esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); },
+
+  listSel(list,current,handler,placeholder){
+    const items=[...list]; if(current&&!items.includes(current))items.unshift(current);
+    return `<select onchange="${handler}"><option value="">${placeholder}</option>${items.map(v=>`<option ${v===current?'selected':''} value="${App.esc(v)}">${App.esc(v)}</option>`).join('')}</select>`;
+  },
+  fillAssocFilter(){
+    const f=document.getElementById('fAssoc'); if(!f)return;
+    const cur=f.value;
+    f.innerHTML='<option value="">All associates</option>'+App.lists.associates.map(a=>`<option ${a===cur?'selected':''}>${App.esc(a)}</option>`).join('');
+  },
 
   renderDash(){
     const os=App.orders;
@@ -521,13 +679,14 @@ const App = {
   renderOrders(){
     const q=document.getElementById('fSearch').value.toLowerCase();
     const fd=document.getElementById('fDept').value, fs=document.getElementById('fStage').value;
-    const fsrc=document.getElementById('fSource').value, fdst=document.getElementById('fDest').value, fr=document.getElementById('fRisk').value;
+    const fsrc=document.getElementById('fSource').value, fdst=document.getElementById('fDest').value, fr=document.getElementById('fRisk').value, fa=document.getElementById('fAssoc').value;
     const rows=App.orders.filter(o=>{
       if(q&&!(`${o.orderNumber} ${o.customerName} ${o.designName}`.toLowerCase().includes(q)))return false;
       if(fd&&o.department!==fd)return false;
       if(fsrc&&o.source!==fsrc)return false;
       if(fdst&&o.destination!==fdst)return false;
       if(fs){const c=App.currentStage(o);if(!c||c.id!==fs)return false;}
+      if(fa){const c=App.currentStage(o);if(!c||o.stages[c.id].associate!==fa)return false;}
       if(fr==='risk'&&!['over','red','amber'].includes(App.isRisk(o)))return false;
       if(fr==='delayed'&&!App.hasDelay(o))return false;
       return true;
@@ -561,6 +720,7 @@ const App = {
         <td class="ordno">${App.esc(r.o.orderNumber)}</td>
         <td>${App.esc(r.o.customerName)}</td>
         <td>${r.s.name}</td>
+        <td>${App.esc(r.st.associate)||'—'}</td>
         <td>${r.s.prod?(r.st.mode==='outsourced'?'<span class="chip gold">Outsourced</span>':'<span class="chip grey">In-house</span>'):'—'}</td>
         <td>${App.esc(r.st.vendor)||'—'}</td>
         <td class="mono" style="color:var(--amber);font-weight:600">${Number(r.st.delayDays)}d</td>
@@ -616,7 +776,7 @@ const App = {
       </div>`:''}
       <div class="editable">
       <div class="grid3">
-        <div class="field"><label>Order number</label><input id="eNo" value="${App.esc(o.orderNumber)}" ${App.isNew?'':'readonly style="background:var(--grey-soft)"'}></div>
+        <div class="field"><label>Order number</label><input id="eNo" value="${App.esc(o.orderNumber)}" inputmode="numeric" pattern="[0-9]*" ${App.isNew?'':'readonly style="background:var(--grey-soft)"'}></div>
         <div class="field"><label>Customer name</label><input id="eCust" value="${App.esc(o.customerName)}"></div>
         <div class="field"><label>Design name</label><input id="eDesign" value="${App.esc(o.designName)}"></div>
       </div>
@@ -647,13 +807,19 @@ const App = {
         <span class="sn">${s.name}</span>
         ${st.status==='done'?'<span class="chip green">Done</span>':st.status==='active'?'<span class="chip plum">In progress</span>':st.status==='na'?'<span class="chip grey">N/A</span>':'<span class="chip grey">Pending</span>'}
         ${s.prod&&st.status!=='na'?(st.mode==='outsourced'?`<span class="chip gold">Outsourced${st.vendor?' · '+App.esc(st.vendor):''}</span>`:'<span class="chip grey">In-house</span>'):''}
+        ${st.associate?`<span class="chip plum">${App.esc(st.associate)}</span>`:''}
         ${Number(st.delayDays)>0?`<span class="chip amber">+${Number(st.delayDays)}d delay</span>`:''}
         <span class="dur">${dur!==null?dur+'d':''}</span>
       </div>
       <div class="stage-body editable">
-        <div class="field"><label>Status</label>
-          <div class="segbtns">
-            ${['pending','active','done','na'].map(v=>`<button type="button" class="segbtn ${st.status===v?'on '+(v==='done'?'g':v==='active'?'p':''):''}" onclick="App.setStage('${s.id}','status','${v}',this)">${v==='pending'?'Pending':v==='active'?'In progress':v==='done'?'Done':'N/A'}</button>`).join('')}
+        <div class="grid2">
+          <div class="field"><label>Status</label>
+            <div class="segbtns">
+              ${['pending','active','done','na'].map(v=>`<button type="button" class="segbtn ${st.status===v?'on '+(v==='done'?'g':v==='active'?'p':''):''}" onclick="App.setStage('${s.id}','status','${v}',this)">${v==='pending'?'Pending':v==='active'?'In progress':v==='done'?'Done':'N/A'}</button>`).join('')}
+            </div>
+          </div>
+          <div class="field"><label>Responsible associate</label>
+            ${App.listSel(App.lists.associates,st.associate,`App.setStage('${s.id}','associate',this.value)`,'— select —')}
           </div>
         </div>
         ${s.prod?`<div class="field" style="margin-top:11px"><label>Where</label>
@@ -662,7 +828,7 @@ const App = {
             <button type="button" class="segbtn ${st.mode==='outsourced'?'on o':''}" onclick="App.setStage('${s.id}','mode','outsourced',this)">Outsourced</button>
           </div></div>
         <div class="grid3" style="margin-top:11px;${st.mode==='outsourced'?'':'display:none'}" id="vnd-${s.id}">
-          <div class="field"><label>Vendor</label><input value="${App.esc(st.vendor)}" oninput="App.setStage('${s.id}','vendor',this.value)"></div>
+          <div class="field"><label>Vendor</label>${App.listSel(App.lists.vendors,st.vendor,`App.setStage('${s.id}','vendor',this.value)`,'— select —')}</div>
           <div class="field"><label>Date sent</label><input type="date" value="${st.dateSent}" onchange="App.setStage('${s.id}','dateSent',this.value)"></div>
           <div class="field"><label>Date returned</label><input type="date" value="${st.dateReturned}" onchange="App.setStage('${s.id}','dateReturned',this.value)"></div>
         </div>`:''}
@@ -719,6 +885,7 @@ const App = {
     if(!App.passcode){App.toast('Enable editing first','err');return;}
     const o=App.collect();
     if(!o.orderNumber){App.toast('Order number is required','err');return;}
+    if(!/^\d+$/.test(o.orderNumber)){App.toast('Order number must be numbers only','err');return;}
     if(!o.customerName){App.toast('Customer name is required','err');return;}
     if(App.isNew && [...App.orders,...App.archive].some(x=>x.orderNumber===o.orderNumber)){App.toast('That order number already exists','err');return;}
     delete o._archived;
