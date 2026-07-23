@@ -23,7 +23,6 @@ input,select,textarea{font-family:inherit;font-size:14px;color:var(--ink);backgr
 input:focus,select:focus,textarea:focus{outline:2px solid var(--plum);outline-offset:1px;border-color:var(--plum)}
 .mono{font-family:'IBM Plex Mono',monospace}
 
-/* ---------- header ---------- */
 header{background:var(--ink);color:#f6f2ee;position:sticky;top:0;z-index:50}
 .hdr-in{max-width:1280px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:18px;height:58px}
 .brand{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
@@ -39,7 +38,6 @@ nav{display:flex;gap:2px;margin-left:auto;overflow-x:auto}
 .syncdot.err{background:#e07070}.syncdot.busy{background:#e0b060;animation:pulse 1s infinite}
 @keyframes pulse{50%{opacity:.35}}
 
-/* ---------- layout ---------- */
 main{max-width:1280px;margin:0 auto;padding:22px 20px 80px}
 .view{display:none}.view.on{display:block}
 h2{font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin-bottom:4px}
@@ -53,7 +51,6 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin-bottom:4px
 .btn.sm{padding:6px 11px;font-size:12.5px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
 
-/* ---------- dashboard ---------- */
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
 .kpi{padding:15px 16px}
 .kpi .n{font-family:'IBM Plex Mono',monospace;font-size:27px;font-weight:600;line-height:1.1}
@@ -76,7 +73,6 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin-bottom:4px
 .risk-item .rmeta{font-size:12px;color:var(--ink-soft)}
 .empty{color:var(--ink-soft);font-size:13px;padding:14px 0;text-align:center}
 
-/* ---------- chips ---------- */
 .chip{display:inline-flex;align-items:center;gap:5px;padding:2.5px 9px;border-radius:99px;font-size:11.5px;font-weight:600;white-space:nowrap}
 .chip.plum{background:var(--plum-soft);color:var(--plum)}
 .chip.gold{background:var(--gold-soft);color:#8a6224}
@@ -87,7 +83,6 @@ h2{font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin-bottom:4px
 .cd{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12.5px}
 .cd.red{color:var(--red)}.cd.amber{color:var(--amber)}.cd.ok{color:var(--green)}
 
-/* ---------- filters + table ---------- */
 .filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
 .filters input,.filters select{width:auto;min-width:130px}
 .filters input[type=search]{min-width:190px}
@@ -100,7 +95,6 @@ tbody tr:hover{background:#fbf7f3}
 tbody tr:last-child td{border-bottom:none}
 .ordno{font-family:'IBM Plex Mono',monospace;font-weight:600}
 
-/* stitch progress */
 .stitch{display:flex;align-items:center;gap:0;min-width:170px}
 .st-dot{width:9px;height:9px;border-radius:50%;background:#ddd6cd;flex:none;border:1.5px solid #ddd6cd}
 .st-dot.done{background:var(--plum);border-color:var(--plum)}
@@ -109,10 +103,9 @@ tbody tr:last-child td{border-bottom:none}
 .st-seg{flex:1;height:0;border-top:2px dashed #ddd6cd;min-width:5px}
 .st-seg.done{border-color:var(--plum)}
 
-/* ---------- modal ---------- */
 .overlay{position:fixed;inset:0;background:rgba(43,36,48,.5);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:26px 14px;overflow-y:auto}
 .overlay.on{display:flex}
-.modal{background:#fff;border-radius:14px;max-width:860px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);margin-bottom:40px}
+.modal{background:#fff;border-radius:14px;max-width:880px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);margin-bottom:40px}
 .modal-h{padding:20px 24px 14px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:14px}
 .modal-h h3{font-family:'Fraunces',serif;font-size:21px;font-weight:600}
 .modal-h .sub{color:var(--ink-soft);font-size:13px;margin-top:2px}
@@ -128,8 +121,14 @@ tbody tr:last-child td{border-bottom:none}
 .metabar .m .ml{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft)}
 .metabar .m .mv{font-weight:600;font-size:13.5px;margin-top:1px}
 
-/* stage rows */
+/* pieces */
+.piece-group{border:1.5px solid var(--line);border-radius:12px;margin-bottom:16px;overflow:hidden}
+.piece-head{display:flex;align-items:center;gap:11px;padding:12px 14px;background:var(--plum-soft);flex-wrap:wrap}
+.piece-head .pn{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--plum);white-space:nowrap}
+.piece-head input{max-width:260px;background:#fff}
+.piece-body{padding:12px}
 .stage-row{border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden}
+.stage-row:last-child{margin-bottom:0}
 .stage-row.done{border-color:#cfe0d5}
 .stage-row.active{border-color:var(--plum)}
 .stage-head{display:flex;align-items:center;gap:11px;padding:11px 14px;background:#fdfcfa;cursor:pointer;flex-wrap:wrap}
@@ -150,24 +149,14 @@ body.viewonly .readonly-note{display:block}
 body.viewonly .editable{pointer-events:none;opacity:.62}
 body.viewonly .edit-only{display:none!important}
 
-/* ---------- setup ---------- */
 #setup{max-width:520px;margin:60px auto;padding:30px}
 #setup h2{margin-bottom:8px}
 #setup p{color:var(--ink-soft);font-size:13.5px;margin-bottom:16px}
 
-/* toast */
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 20px;border-radius:9px;font-weight:600;font-size:13.5px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .25s;z-index:200}
 #toast.on{opacity:1}
 #toast.err{background:var(--red)}
 
-@media(max-width:700px){
-  .hdr-in{padding:0 12px;gap:10px}
-  .brand .sub{display:none}
-  main{padding:16px 12px 70px}
-}
-@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
-
-/* ---------- reports ---------- */
 .repgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
 @media(max-width:900px){.repgrid{grid-template-columns:1fr}}
 .rep-h1{font-family:'Fraunces',serif;font-size:18px;font-weight:600;margin:22px 0 10px}
@@ -188,6 +177,12 @@ body.viewonly .edit-only{display:none!important}
   .view{display:none!important}.view.on{display:block!important}
   .card{box-shadow:none;border-color:#ccc;break-inside:avoid}
 }
+@media(max-width:700px){
+  .hdr-in{padding:0 12px;gap:10px}
+  .brand .sub{display:none}
+  main{padding:16px 12px 70px}
+}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -210,7 +205,6 @@ body.viewonly .edit-only{display:none!important}
 
 <main>
 
-<!-- SETUP -->
 <div id="setup" class="card" style="display:none">
   <h2>Connect your data</h2>
   <p>Paste the Web App URL from your Google Apps Script deployment (see the setup guide). This is saved on this device only — each device that opens the tracker enters it once.</p>
@@ -222,7 +216,6 @@ body.viewonly .edit-only{display:none!important}
   </div>
 </div>
 
-<!-- DASHBOARD -->
 <section class="view on" id="v-dash">
   <div class="pagehead">
     <div><h2>Dashboard</h2><p id="dashSub">—</p></div>
@@ -234,7 +227,7 @@ body.viewonly .edit-only{display:none!important}
   <div class="kpis" id="kpis"></div>
   <div class="dashgrid">
     <div class="card panel">
-      <h3>Orders by current stage</h3>
+      <h3>Pieces by current stage</h3>
       <div id="pipeline"></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:14px">
@@ -250,14 +243,13 @@ body.viewonly .edit-only{display:none!important}
   </div>
 </section>
 
-<!-- ORDERS -->
 <section class="view" id="v-orders">
   <div class="pagehead">
     <div><h2>Orders</h2><p id="ordersSub">—</p></div>
     <button class="btn sm edit-only" onclick="App.openNew()">+ New order</button>
   </div>
   <div class="filters">
-    <input type="search" id="fSearch" placeholder="Search order #, customer, design…" oninput="App.renderOrders()">
+    <input type="search" id="fSearch" placeholder="Search order #, customer, piece…" oninput="App.renderOrders()">
     <select id="fDept" onchange="App.renderOrders()"><option value="">All departments</option><option>Lux</option><option>Bridal</option><option>Formal</option></select>
     <select id="fStage" onchange="App.renderOrders()"><option value="">All stages</option></select>
     <select id="fSource" onchange="App.renderOrders()"><option value="">All sources</option></select>
@@ -268,7 +260,7 @@ body.viewonly .edit-only{display:none!important}
   <div class="card tablewrap">
     <table>
       <thead><tr>
-        <th>Order</th><th>Customer</th><th>Design</th><th>Dept</th><th>Delivery</th><th>Countdown</th><th>Current stage</th><th>Progress</th>
+        <th>Order</th><th>Customer</th><th>Pieces</th><th>Dept</th><th>Delivery</th><th>Countdown</th><th>Current stage</th><th>Progress</th>
       </tr></thead>
       <tbody id="ordersBody"></tbody>
     </table>
@@ -276,19 +268,17 @@ body.viewonly .edit-only{display:none!important}
   </div>
 </section>
 
-<!-- DELAYS -->
 <section class="view" id="v-delays">
   <div class="pagehead"><div><h2>Delays</h2><p id="delaysSub">Every recorded delay across live orders</p></div></div>
   <div class="card tablewrap">
     <table>
-      <thead><tr><th>Order</th><th>Customer</th><th>Stage</th><th>Associate</th><th>Mode</th><th>Vendor</th><th>Days delayed</th><th>Reason</th></tr></thead>
+      <thead><tr><th>Order</th><th>Customer</th><th>Piece</th><th>Stage</th><th>Associate</th><th>Mode</th><th>Vendor</th><th>Days delayed</th><th>Reason</th></tr></thead>
       <tbody id="delaysBody"></tbody>
     </table>
     <div class="empty" id="delaysEmpty" style="display:none">No delays recorded. Long may it last.</div>
   </div>
 </section>
 
-<!-- REPORTS -->
 <section class="view" id="v-reports">
   <div class="pagehead">
     <div><h2>Monthly report</h2><p>Volume by order date · speed, delays &amp; vendors by dispatch date</p></div>
@@ -302,7 +292,6 @@ body.viewonly .edit-only{display:none!important}
   <div id="repBody"></div>
 </section>
 
-<!-- ARCHIVE -->
 <section class="view" id="v-archive">
   <div class="pagehead"><div><h2>Archive</h2><p id="archSub">Delivered orders, kept for the record</p></div></div>
   <div class="filters">
@@ -310,7 +299,7 @@ body.viewonly .edit-only{display:none!important}
   </div>
   <div class="card tablewrap">
     <table>
-      <thead><tr><th>Order</th><th>Customer</th><th>Design</th><th>Dept</th><th>Order date</th><th>Dispatched</th><th>Production days</th><th class="edit-only"></th></tr></thead>
+      <thead><tr><th>Order</th><th>Customer</th><th>Pieces</th><th>Dept</th><th>Order date</th><th>Dispatched</th><th>Production days</th><th class="edit-only"></th></tr></thead>
       <tbody id="archBody"></tbody>
     </table>
     <div class="empty" id="archEmpty" style="display:none">Archive is empty.</div>
@@ -319,7 +308,6 @@ body.viewonly .edit-only{display:none!important}
 
 </main>
 
-<!-- ORDER MODAL -->
 <div class="overlay" id="orderOverlay">
   <div class="modal">
     <div class="modal-h">
@@ -330,6 +318,7 @@ body.viewonly .edit-only{display:none!important}
       <div class="readonly-note">View-only mode — enable editing from the top bar to make changes.</div>
       <div id="mInfo"></div>
       <div id="mStages" style="margin-top:18px"></div>
+      <button class="btn ghost sm edit-only" style="margin-top:4px" onclick="App.addPiece()">+ Add piece</button>
     </div>
     <div class="modal-f">
       <button class="btn danger sm edit-only" id="mDelete" onclick="App.deleteOrder()">Delete</button>
@@ -345,7 +334,6 @@ body.viewonly .edit-only{display:none!important}
 
 <script>
 'use strict';
-/* ================= CONFIG ================= */
 const STAGES = [
   {id:'preprod',   name:'Pre-production',       prod:false},
   {id:'material',  name:'Material Procurement', prod:true},
@@ -359,12 +347,12 @@ const STAGES = [
   {id:'ready',     name:'Ready',                prod:false},
   {id:'dispatched',name:'Dispatched',           prod:false},
 ];
+const STAGE_IDX = Object.fromEntries(STAGES.map((s,i)=>[s.id,i]));
 const SOURCES = ['Studio','Instagram','WhatsApp','Website','Exhibition','Other'];
 const DESTS   = ['Karachi','Lahore','Islamabad','Other Pakistan','USA','UK','UAE','Other'];
 const DEPTS   = ['Lux','Bridal','Formal'];
 const LATE_STAGE_IDS = ['finishing','qc','ready','dispatched'];
 
-/* ================= STATE ================= */
 const App = {
   url: localStorage.getItem('umsha_tracker_url') || '',
   passcode: sessionStorage.getItem('umsha_tracker_pass') || '',
@@ -434,15 +422,28 @@ const App = {
     }catch(e){ App.dot('err'); App.toast('Save failed — check connection','err'); console.error(e); return null; }
   },
 
-  /* ---------- model helpers ---------- */
+  /* ---------- model ---------- */
+  blankStages(){
+    const st={};
+    STAGES.forEach(s=>st[s.id]={status:'pending',mode:'inhouse',vendor:'',dateSent:'',dateReturned:'',startDate:'',endDate:'',delayDays:'',delayReason:'',associate:''});
+    return st;
+  },
   norm(o){
-    o.stages=o.stages||{};
-    STAGES.forEach(s=>{ o.stages[s.id]=Object.assign({status:'pending',mode:'inhouse',vendor:'',dateSent:'',dateReturned:'',startDate:'',endDate:'',delayDays:'',delayReason:'',associate:''},o.stages[s.id]||{}); });
+    // migrate single-piece legacy orders (had o.stages) to pieces model
+    if(!Array.isArray(o.pieces)||!o.pieces.length){
+      o.pieces=[{name:o.designName||'Piece 1',stages:o.stages||{}}];
+    }
+    delete o.stages;
+    o.pieces.forEach(p=>{
+      p.name=p.name||'Piece';
+      const base=App.blankStages();
+      p.stages=p.stages||{};
+      STAGES.forEach(s=>{ p.stages[s.id]=Object.assign({},base[s.id],p.stages[s.id]||{}); });
+    });
     return o;
   },
   blank(){
-    const o={orderNumber:App.nextNo(),customerName:'',designName:'',department:'Bridal',orderDate:App.today(),deliveryDate:'',source:'Instagram',destination:'Karachi',notes:'',stages:{},createdAt:new Date().toISOString()};
-    return App.norm(o);
+    return App.norm({orderNumber:App.nextNo(),customerName:'',department:'Bridal',orderDate:App.today(),deliveryDate:'',source:'Instagram',destination:'Karachi',notes:'',pieces:[{name:'',stages:App.blankStages()}],createdAt:new Date().toISOString()});
   },
   nextNo(){
     let mx=0;[...App.orders,...App.archive].forEach(o=>{const n=parseInt(String(o.orderNumber||'').replace(/\D/g,''));if(!isNaN(n))mx=Math.max(mx,n);});
@@ -451,33 +452,222 @@ const App = {
   today(){ return new Date().toISOString().slice(0,10); },
   days(a,b){ if(!a||!b)return null; return Math.round((new Date(b)-new Date(a))/86400000); },
   countdown(o){ if(!o.deliveryDate)return null; return App.days(App.today(),o.deliveryDate); },
-  currentStage(o){
-    for(const s of STAGES){ const st=o.stages[s.id]; if(st.status!=='done'&&st.status!=='na') return s; }
-    return null; // everything complete
+
+  pieceCur(p){ for(const s of STAGES){const st=p.stages[s.id];if(st.status!=='done'&&st.status!=='na')return s;} return null; },
+  pieceRem(p){ return STAGES.filter(s=>!['done','na'].includes(p.stages[s.id].status)).length; },
+  orderCur(o){
+    let best=null;
+    o.pieces.forEach(p=>{const c=App.pieceCur(p);if(c&&(best===null||STAGE_IDX[c.id]<STAGE_IDX[best.id]))best=c;});
+    return best; // null = every piece complete
   },
-  stagesRemaining(o){ return STAGES.filter(s=>{const st=o.stages[s.id];return st.status!=='done'&&st.status!=='na';}).length; },
-  isRisk(o){ // returns 'over' | 'red' | 'amber' | null
+  maxRem(o){ return Math.max(0,...o.pieces.map(App.pieceRem)); },
+  isRisk(o){
     const cd=App.countdown(o); if(cd===null)return null;
-    const cur=App.currentStage(o); if(!cur)return null;
-    if(cd<0)return 'over';
-    if(cd<=7 && !LATE_STAGE_IDS.includes(cur.id))return 'red';
-    if(cd<=14 && App.stagesRemaining(o)>=4)return 'amber';
-    return null;
+    let worst=null;
+    for(const p of o.pieces){
+      const c=App.pieceCur(p); if(!c)continue;
+      if(cd<0)return 'over';
+      if(cd<=7&&!LATE_STAGE_IDS.includes(c.id))worst='red';
+      else if(cd<=14&&App.pieceRem(p)>=4&&worst!=='red')worst='amber';
+    }
+    return worst;
   },
-  hasDelay(o){ return STAGES.some(s=>Number(o.stages[s.id].delayDays)>0); },
+  hasDelay(o){ return o.pieces.some(p=>STAGES.some(s=>Number(p.stages[s.id].delayDays)>0)); },
+  isDispatched(o){
+    let anyDone=false;
+    for(const p of o.pieces){const st=p.stages.dispatched;if(st.status==='done')anyDone=true;else if(st.status!=='na')return false;}
+    return anyDone;
+  },
+  dispatchDate(o){
+    let d='';
+    o.pieces.forEach(p=>{const st=p.stages.dispatched;if(st.status==='done'){const x=st.endDate||st.startDate||'';if(x>d)d=x;}});
+    return d;
+  },
   prodDays(o){
-    const st=o.stages;
-    const first=st.preprod.startDate||o.orderDate;
-    const last=st.dispatched.endDate||st.dispatched.startDate||'';
-    const d=App.days(first,last); return d===null?null:d;
+    let first=''; o.pieces.forEach(p=>{const x=p.stages.preprod.startDate||'';if(x&&(!first||x<first))first=x;});
+    first=first||o.orderDate;
+    const last=App.dispatchDate(o);
+    return App.days(first,last);
   },
   fmt(d){ if(!d)return '—'; const x=new Date(d); return x.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'}); },
+  esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); },
 
-  /* ---------- render ---------- */
+  listSel(list,current,handler,placeholder){
+    const items=[...list]; if(current&&!items.includes(current))items.unshift(current);
+    return `<select onchange="${handler}"><option value="">${placeholder}</option>${items.map(v=>`<option ${v===current?'selected':''} value="${App.esc(v)}">${App.esc(v)}</option>`).join('')}</select>`;
+  },
+  fillAssocFilter(){
+    const f=document.getElementById('fAssoc'); if(!f)return;
+    const cur=f.value;
+    f.innerHTML='<option value="">All associates</option>'+App.lists.associates.map(a=>`<option ${a===cur?'selected':''}>${App.esc(a)}</option>`).join('');
+  },
+  piecesLabel(o){
+    const names=o.pieces.map(p=>p.name).filter(Boolean);
+    if(!names.length)return '—';
+    if(names.length<=2)return App.esc(names.join(', '));
+    return App.esc(names.slice(0,2).join(', '))+` +${names.length-2}`;
+  },
+
+  /* ---------- shared render bits ---------- */
+  cdChip(o){
+    const cd=App.countdown(o); if(cd===null)return '<span class="cd">—</span>';
+    const r=App.isRisk(o);
+    const cls=(r==='over'||r==='red')?'red':r==='amber'?'amber':'ok';
+    const txt=cd<0?Math.abs(cd)+'d overdue':cd+'d left';
+    return `<span class="cd ${cls}">${txt}</span>`;
+  },
+  stageChip(o){
+    const cur=App.orderCur(o);
+    if(!cur)return '<span class="chip green">Complete</span>';
+    const multi=o.pieces.length>1;
+    return `<span class="chip plum">${cur.name}</span>${multi?` <span class="chip grey">${o.pieces.length} pcs</span>`:''}`;
+  },
+  stitch(o){
+    // aggregated: dot done when ALL pieces done/na at that stage
+    const cur=App.orderCur(o);
+    let html='<div class="stitch">'; let prevDone=true;
+    STAGES.forEach((s,i)=>{
+      const allDone=o.pieces.every(p=>['done','na'].includes(p.stages[s.id].status));
+      const allNa=o.pieces.every(p=>p.stages[s.id].status==='na');
+      const isCur=cur&&cur.id===s.id;
+      if(i>0)html+=`<span class="st-seg ${prevDone?'done':''}"></span>`;
+      html+=`<span class="st-dot ${allDone&&!allNa?'done':allNa?'na':isCur?'cur':''}" title="${s.name}"></span>`;
+      prevDone=allDone&&prevDone;
+    });
+    return html+'</div>';
+  },
+
   renderAll(){ App.renderDash(); App.renderOrders(); App.renderDelays(); App.renderArchive(); App.renderReports(); },
 
+  /* ---------- dashboard ---------- */
+  renderDash(){
+    const os=App.orders;
+    const pieces=os.reduce((n,o)=>n+o.pieces.length,0);
+    const over=os.filter(o=>App.isRisk(o)==='over').length;
+    const red=os.filter(o=>App.isRisk(o)==='red').length;
+    const amber=os.filter(o=>App.isRisk(o)==='amber').length;
+    const outNow=[];
+    os.forEach(o=>o.pieces.forEach(p=>STAGES.forEach(s=>{
+      const st=p.stages[s.id];
+      if(s.prod&&st.mode==='outsourced'&&st.dateSent&&!st.dateReturned&&st.status!=='done'&&st.status!=='na')
+        outNow.push({o,p,s,st});
+    })));
+    document.getElementById('kpis').innerHTML=`
+      <div class="card kpi"><div class="n">${os.length}</div><div class="l">Live orders</div></div>
+      <div class="card kpi"><div class="n">${pieces}</div><div class="l">Pieces in production</div></div>
+      <div class="card kpi red"><div class="n">${over+red}</div><div class="l">At risk / overdue</div></div>
+      <div class="card kpi amber"><div class="n">${amber}</div><div class="l">Watch list</div></div>
+      <div class="card kpi"><div class="n">${outNow.length}</div><div class="l">With vendors</div></div>
+      <div class="card kpi green"><div class="n">${App.archive.length}</div><div class="l">Delivered (archive)</div></div>`;
+    document.getElementById('dashSub').textContent=`${os.length} live orders · ${pieces} pieces · updated ${new Date().toLocaleTimeString()}`;
+
+    const counts=STAGES.map(s=>({s,n:App.orders.reduce((n,o)=>n+o.pieces.filter(p=>{const c=App.pieceCur(p);return c&&c.id===s.id;}).length,0)}));
+    const mx=Math.max(1,...counts.map(c=>c.n));
+    document.getElementById('pipeline').innerHTML=counts.map(c=>`
+      <div class="pipebar"><span class="pl">${c.s.name}</span>
+      <span class="track"><span class="fill" style="width:${(c.n/mx*100)}%;${c.n===0?'opacity:0':''}"></span></span>
+      <span class="pc">${c.n}</span></div>`).join('');
+
+    const scored=os.map(o=>{
+      const cd=App.countdown(o); const rem=App.maxRem(o);
+      if(cd===null||rem===0)return null;
+      const score=cd<=0?9999+rem:rem/Math.max(cd,0.5)*100;
+      return {o,cd,rem,score};
+    }).filter(Boolean).sort((a,b)=>b.score-a.score).slice(0,7);
+    document.getElementById('riskList').innerHTML=scored.length?scored.map(x=>`
+      <div class="risk-item" onclick="App.openOrder('${App.esc(x.o.orderNumber)}')">
+        <div style="flex:1"><div class="rc">#${App.esc(x.o.orderNumber)} · ${App.esc(x.o.customerName)}</div>
+        <div class="rmeta">${App.esc(x.o.department)} · ${x.o.pieces.length} piece${x.o.pieces.length===1?'':'s'} · up to ${x.rem} stage${x.rem===1?'':'s'} remaining</div></div>
+        ${App.cdChip(x.o)}
+      </div>`).join(''):'<div class="empty">Nothing urgent.</div>';
+
+    document.getElementById('vendorList').innerHTML=outNow.length?outNow.map(x=>`
+      <div class="risk-item" onclick="App.openOrder('${App.esc(x.o.orderNumber)}')">
+        <div style="flex:1"><div class="rc">#${App.esc(x.o.orderNumber)} · ${App.esc(x.p.name)} — ${x.s.name}</div>
+        <div class="rmeta">${App.esc(x.st.vendor||'Vendor not named')} · sent ${App.fmt(x.st.dateSent)}</div></div>
+        <span class="chip gold">${App.days(x.st.dateSent,App.today())}d out</span>
+      </div>`).join(''):'<div class="empty">Nothing outsourced right now.</div>';
+  },
+
+  /* ---------- orders ---------- */
+  renderOrders(){
+    const q=document.getElementById('fSearch').value.toLowerCase();
+    const fd=document.getElementById('fDept').value, fs=document.getElementById('fStage').value;
+    const fsrc=document.getElementById('fSource').value, fdst=document.getElementById('fDest').value, fr=document.getElementById('fRisk').value, fa=document.getElementById('fAssoc').value;
+    const rows=App.orders.filter(o=>{
+      const hay=`${o.orderNumber} ${o.customerName} ${o.pieces.map(p=>p.name).join(' ')}`.toLowerCase();
+      if(q&&!hay.includes(q))return false;
+      if(fd&&o.department!==fd)return false;
+      if(fsrc&&o.source!==fsrc)return false;
+      if(fdst&&o.destination!==fdst)return false;
+      if(fs&&!o.pieces.some(p=>{const c=App.pieceCur(p);return c&&c.id===fs;}))return false;
+      if(fa&&!o.pieces.some(p=>{const c=App.pieceCur(p);return c&&p.stages[c.id].associate===fa;}))return false;
+      if(fr==='risk'&&!['over','red','amber'].includes(App.isRisk(o)))return false;
+      if(fr==='delayed'&&!App.hasDelay(o))return false;
+      return true;
+    }).sort((a,b)=>(a.deliveryDate||'9999')<(b.deliveryDate||'9999')?-1:1);
+    document.getElementById('ordersSub').textContent=`${rows.length} of ${App.orders.length} orders`;
+    document.getElementById('ordersEmpty').style.display=rows.length?'none':'block';
+    document.getElementById('ordersBody').innerHTML=rows.map(o=>`
+      <tr onclick="App.openOrder('${App.esc(o.orderNumber)}')">
+        <td class="ordno">${App.esc(o.orderNumber)}</td>
+        <td>${App.esc(o.customerName)}</td>
+        <td>${App.piecesLabel(o)}</td>
+        <td><span class="chip grey">${App.esc(o.department)}</span></td>
+        <td>${App.fmt(o.deliveryDate)}</td>
+        <td>${App.cdChip(o)}</td>
+        <td>${App.stageChip(o)}</td>
+        <td>${App.stitch(o)}</td>
+      </tr>`).join('');
+  },
+
+  /* ---------- delays ---------- */
+  renderDelays(){
+    const rows=[];
+    App.orders.forEach(o=>o.pieces.forEach(p=>STAGES.forEach(s=>{
+      const st=p.stages[s.id];
+      if(Number(st.delayDays)>0)rows.push({o,p,s,st});
+    })));
+    rows.sort((a,b)=>Number(b.st.delayDays)-Number(a.st.delayDays));
+    document.getElementById('delaysSub').textContent=`${rows.length} delay${rows.length===1?'':'s'} across ${new Set(rows.map(r=>r.o.orderNumber)).size} orders`;
+    document.getElementById('delaysEmpty').style.display=rows.length?'none':'block';
+    document.getElementById('delaysBody').innerHTML=rows.map(r=>`
+      <tr onclick="App.openOrder('${App.esc(r.o.orderNumber)}')">
+        <td class="ordno">${App.esc(r.o.orderNumber)}</td>
+        <td>${App.esc(r.o.customerName)}</td>
+        <td>${App.esc(r.p.name)}</td>
+        <td>${r.s.name}</td>
+        <td>${App.esc(r.st.associate)||'—'}</td>
+        <td>${r.s.prod?(r.st.mode==='outsourced'?'<span class="chip gold">Outsourced</span>':'<span class="chip grey">In-house</span>'):'—'}</td>
+        <td>${App.esc(r.st.vendor)||'—'}</td>
+        <td class="mono" style="color:var(--amber);font-weight:600">${Number(r.st.delayDays)}d</td>
+        <td>${App.esc(r.st.delayReason)||'—'}</td>
+      </tr>`).join('');
+  },
+
+  /* ---------- archive ---------- */
+  renderArchive(){
+    const q=document.getElementById('aSearch').value.toLowerCase();
+    const rows=App.archive.filter(o=>!q||`${o.orderNumber} ${o.customerName} ${o.pieces.map(p=>p.name).join(' ')}`.toLowerCase().includes(q))
+      .sort((a,b)=>(b.archivedAt||'')<(a.archivedAt||'')?-1:1);
+    document.getElementById('archSub').textContent=`${App.archive.length} delivered orders`;
+    document.getElementById('archEmpty').style.display=rows.length?'none':'block';
+    document.getElementById('archBody').innerHTML=rows.map(o=>{
+      const pd=App.prodDays(o);
+      return `<tr onclick="App.openOrder('${App.esc(o.orderNumber)}',true)">
+        <td class="ordno">${App.esc(o.orderNumber)}</td>
+        <td>${App.esc(o.customerName)}</td>
+        <td>${App.piecesLabel(o)}</td>
+        <td><span class="chip grey">${App.esc(o.department)}</span></td>
+        <td>${App.fmt(o.orderDate)}</td>
+        <td>${App.fmt(App.dispatchDate(o))}</td>
+        <td class="mono">${pd===null?'—':pd+'d'}</td>
+        <td class="edit-only"><button class="btn ghost sm" onclick="event.stopPropagation();App.restoreOrder('${App.esc(o.orderNumber)}')">Restore</button></td>
+      </tr>`;
+    }).join('');
+  },
+
   /* ---------- reports ---------- */
-  dispatchDate(o){ const d=o.stages&&o.stages.dispatched; return d?(d.endDate||d.startDate||''):''; },
   inMonth(dateStr,ym){ return !!dateStr && dateStr.slice(0,7)===ym; },
   repPrev(){ const el=document.getElementById('repMonth'); const [y,m]=el.value.split('-').map(Number); const d=new Date(y,m-2,1); el.value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); App.renderReports(); },
   repThis(){ document.getElementById('repMonth').value=App.today().slice(0,7); App.renderReports(); },
@@ -492,51 +682,46 @@ const App = {
     const label=new Date(ym+'-01').toLocaleDateString('en-GB',{month:'long',year:'numeric'});
     const all=[...App.orders,...App.archive];
 
-    // ---- volume (by order date) ----
     const received=all.filter(o=>App.inMonth(o.orderDate,ym));
-    const dispatched=all.filter(o=>{const st=o.stages.dispatched; return (st.status==='done')&&App.inMonth(App.dispatchDate(o),ym);});
+    const recPieces=received.reduce((n,o)=>n+o.pieces.length,0);
+    const dispatched=all.filter(o=>App.isDispatched(o)&&App.inMonth(App.dispatchDate(o),ym));
     const live=App.orders.length;
 
-    // ---- speed (dispatched this month) ----
     const prodTimes=dispatched.map(App.prodDays).filter(d=>d!==null&&d>=0);
     const stageDur={};
-    dispatched.forEach(o=>STAGES.forEach(s=>{
-      const st=o.stages[s.id]; if(st.status!=='done')return;
+    dispatched.forEach(o=>o.pieces.forEach(p=>STAGES.forEach(s=>{
+      const st=p.stages[s.id]; if(st.status!=='done')return;
       const d=App.days(st.startDate,st.endDate);
       if(d!==null&&d>=0){ (stageDur[s.id]=stageDur[s.id]||[]).push(d); }
-    }));
+    })));
 
-    // ---- delays (lifecycle of dispatched orders) ----
     const delays=[]; let dlIn=0,dlOut=0;
-    dispatched.forEach(o=>STAGES.forEach(s=>{
-      const st=o.stages[s.id]; const dd=Number(st.delayDays)||0;
-      if(dd>0){ delays.push({o,s,st,dd}); if(s.prod&&st.mode==='outsourced')dlOut+=dd; else dlIn+=dd; }
-    }));
+    dispatched.forEach(o=>o.pieces.forEach(p=>STAGES.forEach(s=>{
+      const st=p.stages[s.id]; const dd=Number(st.delayDays)||0;
+      if(dd>0){ delays.push({s,st,dd}); if(s.prod&&st.mode==='outsourced')dlOut+=dd; else dlIn+=dd; }
+    })));
     const dlByStage={},dlByReason={};
     delays.forEach(d=>{ dlByStage[d.s.name]=(dlByStage[d.s.name]||0)+d.dd; const r=(d.st.delayReason||'Unspecified').trim()||'Unspecified'; dlByReason[r]=(dlByReason[r]||0)+d.dd; });
 
-    // ---- vendors (dispatched this month) ----
     const vend={};
-    dispatched.forEach(o=>STAGES.forEach(s=>{
-      const st=o.stages[s.id];
+    dispatched.forEach(o=>o.pieces.forEach(p=>STAGES.forEach(s=>{
+      const st=p.stages[s.id];
       if(!s.prod||st.mode!=='outsourced')return;
       const name=(st.vendor||'Unnamed vendor').trim()||'Unnamed vendor';
       const v=vend[name]=vend[name]||{jobs:0,turn:[],delay:0};
       v.jobs++; v.delay+=Number(st.delayDays)||0;
       const t=App.days(st.dateSent,st.dateReturned); if(t!==null&&t>=0)v.turn.push(t);
-    }));
+    })));
 
-    // ---- associates (dispatched this month) ----
     const assoc={};
-    dispatched.forEach(o=>STAGES.forEach(s=>{
-      const st=o.stages[s.id];
+    dispatched.forEach(o=>o.pieces.forEach(p=>STAGES.forEach(s=>{
+      const st=p.stages[s.id];
       if(st.status!=='done'||!st.associate)return;
       const a=assoc[st.associate]=assoc[st.associate]||{jobs:0,dur:[],delay:0};
       a.jobs++; a.delay+=Number(st.delayDays)||0;
       const d=App.days(st.startDate,st.endDate); if(d!==null&&d>=0)a.dur.push(d);
-    }));
+    })));
 
-    // ---- deadline performance ----
     const withDl=dispatched.filter(o=>o.deliveryDate);
     const onTime=withDl.filter(o=>App.dispatchDate(o)<=o.deliveryDate);
     const lateDays=withDl.filter(o=>App.dispatchDate(o)>o.deliveryDate).map(o=>App.days(o.deliveryDate,App.dispatchDate(o)));
@@ -548,13 +733,13 @@ const App = {
     document.getElementById('repBody').innerHTML=`
       <div class="kpis">
         <div class="card kpi"><div class="n">${received.length}</div><div class="l">Orders received</div></div>
+        <div class="card kpi"><div class="n">${recPieces}</div><div class="l">Pieces received</div></div>
         <div class="card kpi"><div class="n">${dispatched.length}</div><div class="l">Dispatched</div></div>
-        <div class="card kpi"><div class="n">${live}</div><div class="l">Live (now)</div></div>
         <div class="card kpi ${otPct!==null&&otPct<80?'red':'green'}"><div class="n">${otPct===null?'—':otPct+'%'}</div><div class="l">On-time dispatch</div></div>
         <div class="card kpi"><div class="n">${App.avg(prodTimes)??'—'}</div><div class="l">Avg production days</div></div>
         <div class="card kpi amber"><div class="n">${dlIn+dlOut}</div><div class="l">Delay days (total)</div></div>
       </div>
-      <p style="color:var(--ink-soft);font-size:12.5px;margin-bottom:4px">Report for <strong>${label}</strong> · generated ${new Date().toLocaleString('en-GB')} · dispatched orders in month: ${dispatched.length}${lateDays.length?` · avg days late when missed: ${App.avg(lateDays)}`:''}</p>
+      <p style="color:var(--ink-soft);font-size:12.5px;margin-bottom:4px">Report for <strong>${label}</strong> · generated ${new Date().toLocaleString('en-GB')} · live orders now: ${live}${lateDays.length?` · avg days late when missed: ${App.avg(lateDays)}`:''}</p>
 
       <div class="repgrid">
         <div class="card panel"><h3>Received — by department</h3>${App.miniTable(['Department','#Orders'],App.tally(received,'department'))}</div>
@@ -563,7 +748,7 @@ const App = {
         <div class="card panel"><h3>Delays — in-house vs outsourced</h3>${App.miniTable(['Where','#Delay days'],[['In-house',dlIn],['Outsourced',dlOut]])}</div>
       </div>
 
-      <div class="rep-h1">Average stage duration — orders dispatched in ${label}</div>
+      <div class="rep-h1">Average stage duration — pieces on orders dispatched in ${label}</div>
       <div class="card panel">${durRows.length?durRows.map(r=>`
         <div class="repbar"><span class="bl">${r.name}</span>
         <span class="btrack"><span class="bfill" style="width:${r.avg/maxDur*100}%"></span></span>
@@ -584,190 +769,24 @@ const App = {
         Object.entries(assoc).sort((a,b)=>b[1].jobs-a[1].jobs).map(([n,v])=>[App.esc(n),v.jobs,(App.avg(v.dur)??'—')+(App.avg(v.dur)!==null?'d':''),v.delay]))}</div>`;
   },
 
-  cdChip(o){
-    const cd=App.countdown(o); if(cd===null)return '<span class="cd">—</span>';
-    const r=App.isRisk(o);
-    const cls=(r==='over'||r==='red')?'red':r==='amber'?'amber':'ok';
-    const txt=cd<0?Math.abs(cd)+'d overdue':cd+'d left';
-    return `<span class="cd ${cls}">${txt}</span>`;
-  },
-  stageChip(o){
-    const cur=App.currentStage(o);
-    if(!cur)return '<span class="chip green">Complete</span>';
-    const st=o.stages[cur.id];
-    const out=cur.prod&&st.mode==='outsourced';
-    return `<span class="chip ${st.status==='active'?'plum':'grey'}">${cur.name}</span>${out?' <span class="chip gold">OUT'+(st.vendor?' · '+App.esc(st.vendor):'')+'</span>':''}`;
-  },
-  stitch(o){
-    const cur=App.currentStage(o);
-    let html='<div class="stitch">'; let prevDone=true;
-    STAGES.forEach((s,i)=>{
-      const st=o.stages[s.id];
-      const done=st.status==='done', na=st.status==='na';
-      const isCur=cur&&cur.id===s.id;
-      if(i>0)html+=`<span class="st-seg ${prevDone?'done':''}"></span>`;
-      html+=`<span class="st-dot ${done?'done':na?'na':isCur?'cur':''}" title="${s.name}${na?' (N/A)':''}"></span>`;
-      prevDone=(done||na)&&prevDone;
-    });
-    return html+'</div>';
-  },
-  esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); },
-
-  listSel(list,current,handler,placeholder){
-    const items=[...list]; if(current&&!items.includes(current))items.unshift(current);
-    return `<select onchange="${handler}"><option value="">${placeholder}</option>${items.map(v=>`<option ${v===current?'selected':''} value="${App.esc(v)}">${App.esc(v)}</option>`).join('')}</select>`;
-  },
-  fillAssocFilter(){
-    const f=document.getElementById('fAssoc'); if(!f)return;
-    const cur=f.value;
-    f.innerHTML='<option value="">All associates</option>'+App.lists.associates.map(a=>`<option ${a===cur?'selected':''}>${App.esc(a)}</option>`).join('');
-  },
-
-  renderDash(){
-    const os=App.orders;
-    const over=os.filter(o=>App.isRisk(o)==='over').length;
-    const red=os.filter(o=>App.isRisk(o)==='red').length;
-    const amber=os.filter(o=>App.isRisk(o)==='amber').length;
-    const delayed=os.filter(App.hasDelay).length;
-    const outNow=os.filter(o=>{const c=App.currentStage(o);return c&&c.prod&&o.stages[c.id].mode==='outsourced';}).length;
-    document.getElementById('kpis').innerHTML=`
-      <div class="card kpi"><div class="n">${os.length}</div><div class="l">Live orders</div></div>
-      <div class="card kpi red"><div class="n">${over+red}</div><div class="l">At risk / overdue</div></div>
-      <div class="card kpi amber"><div class="n">${amber}</div><div class="l">Watch list</div></div>
-      <div class="card kpi"><div class="n">${delayed}</div><div class="l">With delays</div></div>
-      <div class="card kpi"><div class="n">${outNow}</div><div class="l">With vendors</div></div>
-      <div class="card kpi green"><div class="n">${App.archive.length}</div><div class="l">Delivered (archive)</div></div>`;
-    document.getElementById('dashSub').textContent=`${os.length} live orders · updated ${new Date().toLocaleTimeString()}`;
-
-    // pipeline
-    const counts=STAGES.map(s=>({s,n:os.filter(o=>{const c=App.currentStage(o);return c&&c.id===s.id;}).length}));
-    const mx=Math.max(1,...counts.map(c=>c.n));
-    document.getElementById('pipeline').innerHTML=counts.map(c=>`
-      <div class="pipebar"><span class="pl">${c.s.name}</span>
-      <span class="track"><span class="fill" style="width:${(c.n/mx*100)}%;${c.n===0?'opacity:0':''}"></span></span>
-      <span class="pc">${c.n}</span></div>`).join('');
-
-    // priority list: score = stages remaining vs days left
-    const scored=os.map(o=>{
-      const cd=App.countdown(o); const rem=App.stagesRemaining(o);
-      if(cd===null||rem===0)return null;
-      const score=cd<=0?9999+rem:rem/Math.max(cd,0.5)*100;
-      return {o,cd,rem,score};
-    }).filter(Boolean).sort((a,b)=>b.score-a.score).slice(0,7);
-    document.getElementById('riskList').innerHTML=scored.length?scored.map(x=>`
-      <div class="risk-item" onclick="App.openOrder('${App.esc(x.o.orderNumber)}')">
-        <div style="flex:1"><div class="rc">${App.esc(x.o.orderNumber)} · ${App.esc(x.o.customerName)}</div>
-        <div class="rmeta">${App.esc(x.o.department)} · ${x.rem} stage${x.rem===1?'':'s'} remaining</div></div>
-        ${App.cdChip(x.o)}
-      </div>`).join(''):'<div class="empty">Nothing urgent.</div>';
-
-    // vendors
-    const withV=[];
-    os.forEach(o=>STAGES.forEach(s=>{
-      const st=o.stages[s.id];
-      if(s.prod&&st.mode==='outsourced'&&st.dateSent&&!st.dateReturned&&st.status!=='done'&&st.status!=='na')
-        withV.push({o,s,st});
-    }));
-    document.getElementById('vendorList').innerHTML=withV.length?withV.map(x=>`
-      <div class="risk-item" onclick="App.openOrder('${App.esc(x.o.orderNumber)}')">
-        <div style="flex:1"><div class="rc">${App.esc(x.o.orderNumber)} — ${x.s.name}</div>
-        <div class="rmeta">${App.esc(x.st.vendor||'Vendor not named')} · sent ${App.fmt(x.st.dateSent)}</div></div>
-        <span class="chip gold">${App.days(x.st.dateSent,App.today())}d out</span>
-      </div>`).join(''):'<div class="empty">Nothing outsourced right now.</div>';
-  },
-
-  renderOrders(){
-    const q=document.getElementById('fSearch').value.toLowerCase();
-    const fd=document.getElementById('fDept').value, fs=document.getElementById('fStage').value;
-    const fsrc=document.getElementById('fSource').value, fdst=document.getElementById('fDest').value, fr=document.getElementById('fRisk').value, fa=document.getElementById('fAssoc').value;
-    const rows=App.orders.filter(o=>{
-      if(q&&!(`${o.orderNumber} ${o.customerName} ${o.designName}`.toLowerCase().includes(q)))return false;
-      if(fd&&o.department!==fd)return false;
-      if(fsrc&&o.source!==fsrc)return false;
-      if(fdst&&o.destination!==fdst)return false;
-      if(fs){const c=App.currentStage(o);if(!c||c.id!==fs)return false;}
-      if(fa){const c=App.currentStage(o);if(!c||o.stages[c.id].associate!==fa)return false;}
-      if(fr==='risk'&&!['over','red','amber'].includes(App.isRisk(o)))return false;
-      if(fr==='delayed'&&!App.hasDelay(o))return false;
-      return true;
-    }).sort((a,b)=>(a.deliveryDate||'9999')<(b.deliveryDate||'9999')?-1:1);
-    document.getElementById('ordersSub').textContent=`${rows.length} of ${App.orders.length} orders`;
-    document.getElementById('ordersEmpty').style.display=rows.length?'none':'block';
-    document.getElementById('ordersBody').innerHTML=rows.map(o=>`
-      <tr onclick="App.openOrder('${App.esc(o.orderNumber)}')">
-        <td class="ordno">${App.esc(o.orderNumber)}</td>
-        <td>${App.esc(o.customerName)}</td>
-        <td>${App.esc(o.designName)}</td>
-        <td><span class="chip grey">${App.esc(o.department)}</span></td>
-        <td>${App.fmt(o.deliveryDate)}</td>
-        <td>${App.cdChip(o)}</td>
-        <td>${App.stageChip(o)}</td>
-        <td>${App.stitch(o)}</td>
-      </tr>`).join('');
-  },
-
-  renderDelays(){
-    const rows=[];
-    App.orders.forEach(o=>STAGES.forEach(s=>{
-      const st=o.stages[s.id];
-      if(Number(st.delayDays)>0)rows.push({o,s,st});
-    }));
-    rows.sort((a,b)=>Number(b.st.delayDays)-Number(a.st.delayDays));
-    document.getElementById('delaysSub').textContent=`${rows.length} delay${rows.length===1?'':'s'} across ${new Set(rows.map(r=>r.o.orderNumber)).size} orders`;
-    document.getElementById('delaysEmpty').style.display=rows.length?'none':'block';
-    document.getElementById('delaysBody').innerHTML=rows.map(r=>`
-      <tr onclick="App.openOrder('${App.esc(r.o.orderNumber)}')">
-        <td class="ordno">${App.esc(r.o.orderNumber)}</td>
-        <td>${App.esc(r.o.customerName)}</td>
-        <td>${r.s.name}</td>
-        <td>${App.esc(r.st.associate)||'—'}</td>
-        <td>${r.s.prod?(r.st.mode==='outsourced'?'<span class="chip gold">Outsourced</span>':'<span class="chip grey">In-house</span>'):'—'}</td>
-        <td>${App.esc(r.st.vendor)||'—'}</td>
-        <td class="mono" style="color:var(--amber);font-weight:600">${Number(r.st.delayDays)}d</td>
-        <td>${App.esc(r.st.delayReason)||'—'}</td>
-      </tr>`).join('');
-  },
-
-  renderArchive(){
-    const q=document.getElementById('aSearch').value.toLowerCase();
-    const rows=App.archive.filter(o=>!q||`${o.orderNumber} ${o.customerName} ${o.designName}`.toLowerCase().includes(q))
-      .sort((a,b)=>(b.archivedAt||'')<(a.archivedAt||'')?-1:1);
-    document.getElementById('archSub').textContent=`${App.archive.length} delivered orders`;
-    document.getElementById('archEmpty').style.display=rows.length?'none':'block';
-    document.getElementById('archBody').innerHTML=rows.map(o=>{
-      const pd=App.prodDays(o);
-      return `<tr onclick="App.openOrder('${App.esc(o.orderNumber)}',true)">
-        <td class="ordno">${App.esc(o.orderNumber)}</td>
-        <td>${App.esc(o.customerName)}</td>
-        <td>${App.esc(o.designName)}</td>
-        <td><span class="chip grey">${App.esc(o.department)}</span></td>
-        <td>${App.fmt(o.orderDate)}</td>
-        <td>${App.fmt(o.stages.dispatched.endDate||o.stages.dispatched.startDate)}</td>
-        <td class="mono">${pd===null?'—':pd+'d'}</td>
-        <td class="edit-only"><button class="btn ghost sm" onclick="event.stopPropagation();App.restoreOrder('${App.esc(o.orderNumber)}')">Restore</button></td>
-      </tr>`;
-    }).join('');
-  },
-
   /* ---------- modal ---------- */
   openNew(){ App.current=App.blank(); App.isNew=true; App.paintModal(); },
   openOrder(no,fromArchive=false){
     const src=fromArchive?App.archive:App.orders;
     const o=src.find(x=>x.orderNumber===no); if(!o)return;
-    App.current=JSON.parse(JSON.stringify(o)); App.isNew=false; App.current._archived=fromArchive;
+    App.current=App.norm(JSON.parse(JSON.stringify(o))); App.isNew=false; App.current._archived=fromArchive;
     App.paintModal();
   },
   closeModal(){ document.getElementById('orderOverlay').classList.remove('on'); App.current=null; },
 
   paintModal(){
     const o=App.current;
-    document.getElementById('mTitle').textContent=App.isNew?'New order':o.orderNumber;
-    document.getElementById('mSub').textContent=App.isNew?'':`${o.customerName||''} · ${o.department||''}`;
+    document.getElementById('mTitle').textContent=App.isNew?'New order':'#'+o.orderNumber;
+    document.getElementById('mSub').textContent=App.isNew?'':`${o.customerName||''} · ${o.department||''} · ${o.pieces.length} piece${o.pieces.length===1?'':'s'}`;
     document.getElementById('mArchive').style.display=(!App.isNew&&!o._archived)?'':'none';
     document.getElementById('mDelete').style.display=App.isNew?'none':'';
 
-    // info
-    const cd=App.countdown(o), pd=App.prodDays(o);
+    const pd=App.prodDays(o);
     document.getElementById('mInfo').innerHTML=`
       ${!App.isNew?`<div class="metabar">
         <div class="m"><div class="ml">Countdown</div><div class="mv">${App.cdChip(o)}</div></div>
@@ -778,32 +797,45 @@ const App = {
       <div class="grid3">
         <div class="field"><label>Order number</label><input id="eNo" value="${App.esc(o.orderNumber)}" inputmode="numeric" pattern="[0-9]*" ${App.isNew?'':'readonly style="background:var(--grey-soft)"'}></div>
         <div class="field"><label>Customer name</label><input id="eCust" value="${App.esc(o.customerName)}"></div>
-        <div class="field"><label>Design name</label><input id="eDesign" value="${App.esc(o.designName)}"></div>
+        <div class="field"><label>Department</label><select id="eDept">${DEPTS.map(d=>`<option ${o.department===d?'selected':''}>${d}</option>`).join('')}</select></div>
       </div>
       <div class="grid3" style="margin-top:12px">
-        <div class="field"><label>Department</label><select id="eDept">${DEPTS.map(d=>`<option ${o.department===d?'selected':''}>${d}</option>`).join('')}</select></div>
         <div class="field"><label>Order date</label><input type="date" id="eODate" value="${o.orderDate||''}"></div>
         <div class="field"><label>Delivery date</label><input type="date" id="eDDate" value="${o.deliveryDate||''}"></div>
-      </div>
-      <div class="grid3" style="margin-top:12px">
-        <div class="field"><label>Order source</label><select id="eSrc">${SOURCES.map(d=>`<option ${o.source===d?'selected':''}>${d}</option>`).join('')}</select></div>
-        <div class="field"><label>Destination</label><select id="eDst">${DESTS.map(d=>`<option ${o.destination===d?'selected':''}>${d}</option>`).join('')}</select></div>
         <div class="field"><label>Notes</label><input id="eNotes" value="${App.esc(o.notes)}" placeholder="Optional"></div>
       </div>
+      <div class="grid2" style="margin-top:12px">
+        <div class="field"><label>Order source</label><select id="eSrc">${SOURCES.map(d=>`<option ${o.source===d?'selected':''}>${d}</option>`).join('')}</select></div>
+        <div class="field"><label>Destination</label><select id="eDst">${DESTS.map(d=>`<option ${o.destination===d?'selected':''}>${d}</option>`).join('')}</select></div>
+      </div>
       </div>`;
-
-    // stages
-    document.getElementById('mStages').innerHTML=`<h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.11em;color:var(--ink-soft);margin-bottom:11px;font-weight:700">Stages</h3>`
-      + STAGES.map(s=>App.stageRow(s,o.stages[s.id])).join('');
+    App.repaintPieces();
     document.getElementById('orderOverlay').classList.add('on');
   },
 
-  stageRow(s,st){
+  repaintPieces(openRowId){
+    const o=App.current;
+    document.getElementById('mStages').innerHTML=o.pieces.map((p,pi)=>`
+      <div class="piece-group">
+        <div class="piece-head editable">
+          <span class="pn">Piece ${pi+1}</span>
+          <input value="${App.esc(p.name)}" placeholder="Piece name, e.g. Bridal Lehenga" oninput="App.current.pieces[${pi}].name=this.value">
+          ${o.pieces.length>1?`<button type="button" class="btn ghost sm edit-only" onclick="App.removePiece(${pi})" style="margin-left:auto">Remove</button>`:''}
+        </div>
+        <div class="piece-body">
+          ${STAGES.map(s=>App.stageRow(pi,s,p.stages[s.id])).join('')}
+        </div>
+      </div>`).join('');
+    if(openRowId){const el=document.getElementById(openRowId);if(el)el.classList.add('open');}
+  },
+
+  stageRow(pi,s,st){
     const dur=App.days(st.startDate,st.endDate);
-    const open=st.status==='active';
+    const rid=`row-${pi}-${s.id}`;
     const cls=st.status==='done'?'done':st.status==='active'?'active':'';
-    return `<div class="stage-row ${cls} ${open?'open':''}" id="row-${s.id}">
-      <div class="stage-head" onclick="document.getElementById('row-${s.id}').classList.toggle('open')">
+    const open=st.status==='active';
+    return `<div class="stage-row ${cls} ${open?'open':''}" id="${rid}">
+      <div class="stage-head" onclick="document.getElementById('${rid}').classList.toggle('open')">
         <span class="sn">${s.name}</span>
         ${st.status==='done'?'<span class="chip green">Done</span>':st.status==='active'?'<span class="chip plum">In progress</span>':st.status==='na'?'<span class="chip grey">N/A</span>':'<span class="chip grey">Pending</span>'}
         ${s.prod&&st.status!=='na'?(st.mode==='outsourced'?`<span class="chip gold">Outsourced${st.vendor?' · '+App.esc(st.vendor):''}</span>`:'<span class="chip grey">In-house</span>'):''}
@@ -815,69 +847,70 @@ const App = {
         <div class="grid2">
           <div class="field"><label>Status</label>
             <div class="segbtns">
-              ${['pending','active','done','na'].map(v=>`<button type="button" class="segbtn ${st.status===v?'on '+(v==='done'?'g':v==='active'?'p':''):''}" onclick="App.setStage('${s.id}','status','${v}',this)">${v==='pending'?'Pending':v==='active'?'In progress':v==='done'?'Done':'N/A'}</button>`).join('')}
+              ${['pending','active','done','na'].map(v=>`<button type="button" class="segbtn ${st.status===v?'on '+(v==='done'?'g':v==='active'?'p':''):''}" onclick="App.setStage(${pi},'${s.id}','status','${v}')">${v==='pending'?'Pending':v==='active'?'In progress':v==='done'?'Done':'N/A'}</button>`).join('')}
             </div>
           </div>
           <div class="field"><label>Responsible associate</label>
-            ${App.listSel(App.lists.associates,st.associate,`App.setStage('${s.id}','associate',this.value)`,'— select —')}
+            ${App.listSel(App.lists.associates,st.associate,`App.setStage(${pi},'${s.id}','associate',this.value)`,'— select —')}
           </div>
         </div>
         ${s.prod?`<div class="field" style="margin-top:11px"><label>Where</label>
           <div class="segbtns">
-            <button type="button" class="segbtn ${st.mode==='inhouse'?'on':''}" onclick="App.setStage('${s.id}','mode','inhouse',this)">In-house</button>
-            <button type="button" class="segbtn ${st.mode==='outsourced'?'on o':''}" onclick="App.setStage('${s.id}','mode','outsourced',this)">Outsourced</button>
+            <button type="button" class="segbtn ${st.mode==='inhouse'?'on':''}" onclick="App.setStage(${pi},'${s.id}','mode','inhouse')">In-house</button>
+            <button type="button" class="segbtn ${st.mode==='outsourced'?'on o':''}" onclick="App.setStage(${pi},'${s.id}','mode','outsourced')">Outsourced</button>
           </div></div>
-        <div class="grid3" style="margin-top:11px;${st.mode==='outsourced'?'':'display:none'}" id="vnd-${s.id}">
-          <div class="field"><label>Vendor</label>${App.listSel(App.lists.vendors,st.vendor,`App.setStage('${s.id}','vendor',this.value)`,'— select —')}</div>
-          <div class="field"><label>Date sent</label><input type="date" value="${st.dateSent}" onchange="App.setStage('${s.id}','dateSent',this.value)"></div>
-          <div class="field"><label>Date returned</label><input type="date" value="${st.dateReturned}" onchange="App.setStage('${s.id}','dateReturned',this.value)"></div>
+        <div class="grid3" style="margin-top:11px;${st.mode==='outsourced'?'':'display:none'}">
+          <div class="field"><label>Vendor</label>${App.listSel(App.lists.vendors,st.vendor,`App.setStage(${pi},'${s.id}','vendor',this.value)`,'— select —')}</div>
+          <div class="field"><label>Date sent</label><input type="date" value="${st.dateSent}" onchange="App.setStage(${pi},'${s.id}','dateSent',this.value)"></div>
+          <div class="field"><label>Date returned</label><input type="date" value="${st.dateReturned}" onchange="App.setStage(${pi},'${s.id}','dateReturned',this.value)"></div>
         </div>`:''}
         <div class="grid2" style="margin-top:11px">
-          <div class="field"><label>Start date</label><input type="date" value="${st.startDate}" onchange="App.setStage('${s.id}','startDate',this.value)"></div>
-          <div class="field"><label>End date</label><input type="date" value="${st.endDate}" onchange="App.setStage('${s.id}','endDate',this.value)"></div>
+          <div class="field"><label>Start date</label><input type="date" value="${st.startDate}" onchange="App.setStage(${pi},'${s.id}','startDate',this.value)"></div>
+          <div class="field"><label>End date</label><input type="date" value="${st.endDate}" onchange="App.setStage(${pi},'${s.id}','endDate',this.value)"></div>
         </div>
         <div class="delaybox">
           <div class="grid2">
-            <div class="field"><label>Delay (days)</label><input type="number" min="0" value="${st.delayDays}" oninput="App.setStage('${s.id}','delayDays',this.value)"></div>
-            <div class="field"><label>Delay reason</label><input value="${App.esc(st.delayReason)}" oninput="App.setStage('${s.id}','delayReason',this.value)" placeholder="e.g. vendor late, fabric shortage"></div>
+            <div class="field"><label>Delay (days)</label><input type="number" min="0" value="${st.delayDays}" oninput="App.setStage(${pi},'${s.id}','delayDays',this.value,true)"></div>
+            <div class="field"><label>Delay reason</label><input value="${App.esc(st.delayReason)}" oninput="App.setStage(${pi},'${s.id}','delayReason',this.value,true)" placeholder="e.g. vendor late, fabric shortage"></div>
           </div>
         </div>
       </div>
     </div>`;
   },
 
-  setStage(id,key,val,btn){
-    const st=App.current.stages[id]; st[key]=val;
-    // auto-dates for convenience
+  setStage(pi,sid,key,val,noRepaint){
+    const st=App.current.pieces[pi].stages[sid]; st[key]=val;
+    if(noRepaint)return; // free-typing fields: don't repaint mid-keystroke
     if(key==='status'){
       if(val==='active'&&!st.startDate)st.startDate=App.today();
       if(val==='done'&&!st.endDate)st.endDate=App.today();
-      const oldOpen=document.getElementById('row-'+id).classList.contains('open');
-      App.repaintStages(); if(oldOpen)document.getElementById('row-'+id).classList.add('open');
-      return;
     }
-    if(key==='mode'){
-      const v=document.getElementById('vnd-'+id); if(v)v.style.display=val==='outsourced'?'':'none';
-      const oldOpen=document.getElementById('row-'+id).classList.contains('open');
-      App.repaintStages(); if(oldOpen)document.getElementById('row-'+id).classList.add('open');
+    if(key==='status'||key==='mode'||key==='vendor'||key==='associate'){
+      App.repaintPieces(`row-${pi}-${sid}`);
     }
   },
-  repaintStages(){
-    document.getElementById('mStages').innerHTML=`<h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.11em;color:var(--ink-soft);margin-bottom:11px;font-weight:700">Stages</h3>`
-      + STAGES.map(s=>App.stageRow(s,App.current.stages[s.id])).join('');
+  addPiece(){
+    App.current.pieces.push({name:'',stages:App.blankStages()});
+    App.repaintPieces();
+  },
+  removePiece(pi){
+    if(App.current.pieces.length<=1)return;
+    if(!confirm(`Remove Piece ${pi+1} (${App.current.pieces[pi].name||'unnamed'}) and its stage history?`))return;
+    App.current.pieces.splice(pi,1);
+    App.repaintPieces();
   },
 
   collect(){
     const o=App.current;
     o.orderNumber=document.getElementById('eNo').value.trim();
     o.customerName=document.getElementById('eCust').value.trim();
-    o.designName=document.getElementById('eDesign').value.trim();
     o.department=document.getElementById('eDept').value;
     o.orderDate=document.getElementById('eODate').value;
     o.deliveryDate=document.getElementById('eDDate').value;
     o.source=document.getElementById('eSrc').value;
     o.destination=document.getElementById('eDst').value;
     o.notes=document.getElementById('eNotes').value.trim();
+    o.pieces.forEach((p,i)=>{ if(!p.name.trim())p.name='Piece '+(i+1); p.name=p.name.trim(); });
     return o;
   },
 
@@ -895,7 +928,7 @@ const App = {
   },
   async deleteOrder(){
     if(!App.passcode){App.toast('Enable editing first','err');return;}
-    if(!confirm(`Delete order ${App.current.orderNumber} permanently? This cannot be undone. To keep the record, use "Move to archive" instead.`))return;
+    if(!confirm(`Delete order #${App.current.orderNumber} permanently? This cannot be undone. To keep the record, use "Move to archive" instead.`))return;
     const j=await App.post({action:'deleteOrder',orderNumber:App.current.orderNumber,from:App.current._archived?'archive':'orders'});
     if(!j)return;
     App.toast('Deleted'); App.closeModal(); App.refresh();
